@@ -170,7 +170,7 @@ let changeClass = ( classname, styleString ) => (
             })
         })  
         return arrReturn
-    }()
+    }(classname, styleString)
 
 ).length > 0 ? console.log ( "found" ) :
     document.head.appendChild (
@@ -196,7 +196,7 @@ var changeClass = ( classname, styleString ) => (
             })
             for (item of arrReturn) item.setProperty('background-color','red','important') 
             return arrReturn
-        }()
+        }(classname, styleString)
 ).length > 0 ? console.log ( "found" ) :
     document.head.appendChild (
         document.createElement ( "style" )
