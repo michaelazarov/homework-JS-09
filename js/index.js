@@ -122,7 +122,9 @@ users.showPresent()
 // second-level-menu, у всех элементов этого класса 
 // цвет фона должен измениться на красный
 //------------------------------------
-function findCange(classname, styleString) {
+
+//Вариант1
+function findChange(classname, styleString) {
     arrReturn = [] 
     styleSheets = document.styleSheets
     Object.keys(styleSheets).forEach(indexStyleSheet => {
@@ -142,7 +144,7 @@ function findCange(classname, styleString) {
 }
 
 let changeClass = ( classname, styleString ) => (
-   findCange(classname, styleString)
+   findChange(classname, styleString)
 ).length > 0 ? console.log ( "found" ) :
     document.head.appendChild (
         document.createElement ( "style" )
@@ -150,4 +152,30 @@ let changeClass = ( classname, styleString ) => (
 
 changeClass ("second-level-menu", "background-color: red!important;")
 
+//Вариант2 перенес функцию вовнутрь
+let changeClass = ( classname, styleString ) => (
+    function findChange(classname, styleString) {
+        arrReturn = []  
+        Object.keys(document.styleSheets).forEach(indexStyleSheet => {
+            cssRules = document.styleSheets[indexStyleSheet].cssRules
+            Object.keys(cssRules).forEach(indexCssRule => {
+                if (!!cssRules[indexCssRule].selectorText){
+                    if(cssRules[indexCssRule].selectorText.indexOf(`.${classname}`) !== -1){
+                        if (cssRules[indexCssRule].style !== undefined){
+                            cssRules[indexCssRule].style.setProperty('background-color','red','important')
+                            arrReturn.push(cssRules[indexCssRule])
+                         }
+                    }
+                 }
+            })
+        })  
+        return arrReturn
+    }()
+
+).length > 0 ? console.log ( "found" ) :
+    document.head.appendChild (
+        document.createElement ( "style" )
+    ).textContent = `.${classname} {${styleString}}`
+
+changeClass ("second-level-menu", "background-color: red!important;")
 
