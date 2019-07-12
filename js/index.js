@@ -204,3 +204,31 @@ var changeClass = ( classname, styleString ) => (
 
 changeClass ("second-level-menu", "background-color: red!important;")
 
+// Вариант 4
+var changeClass = ( classname, styleString ) => (
+    function findChange(classname, styleString){
+        var arrReturn = []      
+         Array.from(document.styleSheets).forEach((itemSS) => {
+            Array.from(itemSS.cssRules).forEach((itemCR) => {                  
+                 itemCR.type === 1 
+                     ? itemCR.selectorText.indexOf(`.${classname}`) !== -1
+                        ? itemCR.style !== undefined
+                            ? arrReturn.push(itemCR.style)
+                            : null
+                         :null
+                    :null                 
+            })             
+        })
+        for (item of arrReturn) {          
+            document.head.appendChild (document.createElement ( "style" ))
+            .textContent = `.${classname} {${styleString}}`
+        }
+        return arrReturn
+    }( classname, styleString )
+).length > 0 ? console.log ( "found" ) :
+    document.head.appendChild (
+        document.createElement ( "style" )
+    ).textContent = `.${classname} {${styleString}}`
+
+changeClass ("second-level-menu", "background-color: red!important;")
+
